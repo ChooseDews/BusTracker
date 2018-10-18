@@ -1,0 +1,21 @@
+<html>
+
+  <body>
+      
+    <h1>Bus List</h1>
+    
+    <ul>
+    
+      
+      <% for(var route in routes) {%>
+
+      
+      <li><%=route%> ------ <b><%=routes[route].length%></b></li>
+      
+      <%}%>
+    
+    </ul>
+    
+  </body>
+
+</html>
