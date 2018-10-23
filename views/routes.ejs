@@ -17,7 +17,7 @@
     
     
     .stops{
-      font-size: 12px;
+      font-size: 10px;
     }
   </style>
 
@@ -29,15 +29,6 @@
   <div class="container-fluid">
 
     <h1>Bus List</h1>
-    <%
-    
-    const numberWithCommas = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-    
-    
-    %>
-    <p><b><%=numberWithCommas(count)%></b> Records</p>
 
 
 
@@ -46,14 +37,13 @@
 
 
 
-    <% for(var bus of buses) {  
+    <% for(var route in routes) {  
       
       
       
-      var route_info = bus.route;
- 
-      var stops = bus.stops; 
-      //var buses = routes[route];
+      var route_info = routes[route][0].route;
+      var stops = routes[route][0].stops; 
+      var buses = routes[route];
     
     
     
@@ -65,29 +55,34 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title"><span class="route" style="background-color: <%=route_info.color%>"><%= route_info.short_name %></span>
-            <%=route_info.long_name%> (<a href="/export/<%= bus.call_name %>" title="Export Bus Data"><%= bus.call_name %></a>)<a href="/a/<%= bus.call_name %>" title="Look at the rough analysis">A</a>
+            <%=route%> (<%= buses.length %>)
           </h5>
           <p class="card-text">
             
             
-            
-            Bus Location: <%=JSON.stringify(bus.position)%> <br>
-            <%if(bus.next_stop){%>Next: <%=(bus.next_stop.name)%><br><%}%>  
-            <%if(bus.current_stop){%><b>Current: <%=(bus.current_stop.name)%></b><%}%>
-            
-            <h5><%=bus.textPrediction%></h5>
-     
+            <h6>Buses</h6>
+          
+          <ol>
 
-            <h6>Predicted Locations</h6>
+            <%for(var bus of buses){%>
+              
+            <li><%=bus.id%> <%=JSON.stringify(bus.position)%></li>
+            
+            <%}%>
+            
+            
+            </ol>
+
+            <h6>Stops</h6>
             <div class="stops">
             <ol>
-          <%for(var stop of stops){ if(stop.distance < 50){%>
+          <%for(var stop of stops){%>
               
-              <li><b><%=stop.name%> (<%=stop.code%>)</b> - <%=JSON.stringify(stop.position)%> - <b><%=(stop.distance)%> meters</b></li>
+              <li><b><%=stop.name%></b> - <%=JSON.stringify(stop.position)%></li>
               
               
               
-            <%}}%> 
+            <%}%> 
               </ol>
           </div>
 

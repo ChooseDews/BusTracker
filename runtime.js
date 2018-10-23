@@ -190,8 +190,8 @@ var analyzeStatus = function(bus) {
 
 setInterval(function() {
 
-  //console.log('Getting Status!')
-  //getBusesStatus(true);
+  console.log('Getting Status!')
+  getBusesStatus(true);
 
 
 }, 3000);
@@ -200,69 +200,4 @@ setInterval(function() {
 
 //Server Stuff
 
-const app = express()
 
-app.set('view engine', 'ejs');
-
-const port = 3000;
-
-app.get('/routes', async function(req, res) {
-  var busData = await getBusesStatus();
-
-  //console.log(busData);
-  busData = lodash.groupBy(busData, 'route.long_name');
-  //console.log(busData);
-
-  res.render('routes', {
-    routes: busData
-  });
-
-  //console.log(busData);
-});
-
-
-app.get(['/buses', '/'], async function(req, res) {
-  var busData = await getBusesStatus();
-
-
-  var busData = busData.sort(function(a, b) {
-    return Number(a.call_name) - Number(b.call_name);
-  })
-  
-  var count = await db.count();
-
-  res.render('buses', {
-    buses: busData,
-    count
-  });
-
-  //console.log(busData);
-});
-
-
-
-app.get(['/export', '/export/:route'], async function(req, res) {
-  var a = '554';
-  if (req.params.route) a = req.params.route;
-
-  var csv_data = await db.exportData(a);
-  res.attachment('route_' + a + '_data.csv');
-  res.status(200).send(csv_data);
-  //console.log(busData);
-});
-
-
-app.get(['/a', '/a/:route'], async function(req, res) {
-  var a = '554';
-  if (req.params.route) a = req.params.route;
-
-  var data = await db.analyzePeriod(a);
-  res.render('stops', {stops: data});
-  //console.log(busData);
-});
-
-
-
-
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
